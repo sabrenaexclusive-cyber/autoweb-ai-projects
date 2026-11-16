@@ -1,200 +1,428 @@
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="AutoWeb AI — AI-powered websites, 3D experiences and useful web tools.">
-  <title>AutoWeb AI | Websites & Tools</title>
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      background: #080d1d;
-      color: #f4f6ff;
-      font-family: Arial, sans-serif;
-    }
-    header {
-      padding: 22px 7%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-bottom: 1px solid #26314a;
-    }
-    .logo { font-size: 24px; font-weight: 800; }
-    .logo span { color: #7c8cff; }
-    nav a { color: #b9c5dc; text-decoration: none; }
-    .hero {
-      text-align: center;
-      padding: 100px 20px 85px;
-      background: radial-gradient(ellipse at top, #1e2857, #080d1d 70%);
-    }
-    .eyebrow { color: #a5b4fc; font-weight: 700; }
-    h1 {
-      font-size: clamp(38px, 6vw, 72px);
-      margin: 20px auto;
-      max-width: 850px;
-      line-height: 1.12;
-    }
-    h1 span { color: #9aa7ff; }
-    .hero p {
-      color: #b8c3d9;
-      max-width: 630px;
-      margin: 0 auto 30px;
-      line-height: 1.7;
-    }
-    .btn {
-      display: inline-block;
-      background: linear-gradient(120deg, #7366ff, #32b8df);
-      padding: 15px 25px;
-      color: white;
-      text-decoration: none;
-      border-radius: 12px;
-      font-weight: 700;
-    }
-    section { padding: 65px 7%; }
-    h2 { font-size: 32px; }
-    .subtitle { color: #aab8d0; }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 24px;
-      margin-top: 35px;
-    }
-    .card {
-      background: #121b30;
-      border: 1px solid #293654;
-      border-radius: 18px;
-      padding: 26px;
-      transition: transform .2s, border-color .2s;
-    }
-    .card:hover {
-      transform: translateY(-5px);
-      border-color: #8490ff;
-    }
-    .art {
-      height: 145px;
-      border-radius: 12px;
-      background: linear-gradient(135deg, #293c77, #6948b4, #1c8caa);
-      display: grid;
-      place-items: center;
-      font-size: 52px;
-    }
-    .tag { color: #9eacff; font-size: 13px; margin-top: 22px; }
-    .card p { color: #b3bfd4; line-height: 1.6; }
-    .card a { color: #a8b7ff; font-weight: 700; }
-    footer {
-      text-align: center;
-      padding: 35px 20px;
-      border-top: 1px solid #26314a;
-      color: #94a3b8;
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#080d1d">
+<meta name="description" content="Explore AI-built websites, 3D experiences and tools on AutoWeb AI Pro.">
+<title>AutoWeb AI Pro | Discover AI-built projects</title>
+<style>
+:root{color-scheme:dark;--bg:#080d1d;--panel:#111b32;--border:#293955;--muted:#a7b7d3;--text:#f5f7ff;--accent:#8c8bff}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:radial-gradient(ellipse at 50% 0,#1b2854 0,#080d1d 55%);color:var(--text);font:16px/1.6 system-ui,-apple-system,Segoe UI,sans-serif}
+a{color:inherit}
+button,input,select{font:inherit}
+button{cursor:pointer}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #70d7ff;outline-offset:3px}
+.wrap{max-width:1200px;margin:auto;padding:0 22px}
+header{position:sticky;top:0;z-index:10;background:#080d1ded;backdrop-filter:blur(14px);border-bottom:1px solid var(--border)}
+nav{min-height:75px;display:flex;align-items:center;justify-content:space-between;gap:15px}
+.brand{font-size:23px;font-weight:850;text-decoration:none;letter-spacing:-.7px}
+.brand span,.gradient{background:linear-gradient(110deg,#a69aff,#3cc9e6);background-clip:text;-webkit-background-clip:text;color:transparent}
+.navlinks{display:flex;gap:22px;align-items:center}
+.navlinks a{text-decoration:none;color:#c5d3ef}
+.navlinks a:hover{color:white}
+.hero{text-align:center;padding:100px 0 75px}
+.eyebrow{color:#a5b5ff;text-transform:uppercase;font-weight:800;letter-spacing:2px;font-size:13px}
+h1{font-size:clamp(43px,7vw,83px);line-height:1.1;letter-spacing:-3px;max-width:950px;margin:18px auto}
+p.lead{color:var(--muted);max-width:720px;margin:22px auto 32px;font-size:19px}
+.primary{display:inline-block;text-decoration:none;border:0;border-radius:13px;background:linear-gradient(110deg,#7168f5,#25b7df);color:#fff;padding:14px 24px;font-weight:750}
+.stats{display:flex;justify-content:center;gap:15px;flex-wrap:wrap;margin:40px 0 0}
+.stat{background:#141f38b8;border:1px solid var(--border);padding:14px 25px;border-radius:15px;min-width:150px}
+.stat strong{display:block;font-size:25px}
+.stat span{color:var(--muted);font-size:13px}
+.section{padding:38px 0 65px}
+h2{font-size:clamp(29px,4vw,40px);letter-spacing:-1px;margin:0 0 6px}
+.muted{color:var(--muted)}
+.toolbar{display:grid;grid-template-columns:minmax(180px,2fr) minmax(140px,1fr) minmax(150px,1fr);gap:12px;margin:26px 0 15px}
+input,select{background:#111b32;color:var(--text);border:1px solid #354462;border-radius:12px;padding:13px;width:100%}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}
+.chip{border:1px solid var(--border);background:#121b32;color:#cbd7f0;border-radius:30px;padding:7px 14px}
+.chip.active{background:#3b397b;border-color:#aaa5ff;color:white}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,285px),1fr));gap:19px}
+.card{background:linear-gradient(140deg,#17233e,#101829);border:1px solid var(--border);border-radius:19px;padding:23px;display:flex;flex-direction:column;min-height:255px;transition:transform .2s,border-color .2s}
+.card:hover{transform:translateY(-4px);border-color:#8d92ff}
+.cardhead{display:flex;justify-content:space-between;align-items:start;gap:8px}
+.symbol{width:48px;height:48px;border-radius:13px;display:grid;place-items:center;font-size:25px;background:linear-gradient(120deg,#7068f1,#28b4d4)}
+.favorite{border:1px solid var(--border);background:#18233e;color:#d1ddf3;border-radius:9px;padding:5px 10px;font-size:21px}
+.favorite[aria-pressed=true]{color:#ff91b4;border-color:#b75e8a}
+.card h3{font-size:21px;line-height:1.3;overflow-wrap:anywhere;margin:20px 0 8px}
+.card p{color:var(--muted);font-size:14px;margin:0 0 18px}
+.tag{font-size:12px;color:#b2baff;border:1px solid #465078;border-radius:30px;padding:4px 10px;display:inline-block;width:max-content}
+.actions{display:flex;gap:12px;align-items:center;justify-content:space-between;margin-top:auto;padding-top:20px}
+.actions a{font-weight:750;text-decoration:none;color:#aab9ff}
+.actions button{background:transparent;border:0;color:#b4c4df;padding:5px}
+.notice{padding:27px;border:1px dashed #44516d;background:#111a2e;border-radius:15px;text-align:center;color:#bdcbe1;grid-column:1/-1}
+.loadmore{display:block;margin:27px auto;background:#202d4c;color:white;border:1px solid #45577d;border-radius:11px;padding:12px 25px}
+.about{background:#111a30;border:1px solid var(--border);border-radius:22px;padding:35px;margin:40px 0 80px}
+.about p{max-width:820px}
+.footer{text-align:center;padding:30px;border-top:1px solid var(--border);color:var(--muted)}
+dialog{max-width:550px;width:calc(100% - 35px);border:1px solid #536286;border-radius:18px;background:#141f37;color:white;padding:25px}
+dialog::backdrop{background:#000b}
+.modalhead{display:flex;justify-content:space-between;align-items:center;gap:15px}
+.modalhead button{border:0;background:#26334e;color:white;border-radius:8px;padding:5px 11px}
+.modalactions{display:flex;gap:15px;flex-wrap:wrap;align-items:center;margin-top:20px}
+.small{font-size:13px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+@media(max-width:700px){
+.toolbar{grid-template-columns:1fr}
+.hero{padding:75px 0 55px}
+h1{letter-spacing:-1.5px}
+.navlinks{gap:12px;font-size:14px}
+.stat{min-width:110px;padding:12px}
+.about{padding:24px}
+}
+@media(prefers-reduced-motion:reduce){
+html{scroll-behavior:auto}
+*{transition:none!important}
+}
+</style>
 </head>
 <body>
-  <header>
-    <div class="logo">AutoWeb <span>AI</span></div>
-    <nav><a href="#projects">Explore Projects</a></nav>
-  </header>
 
-  <main>
-    <div class="hero">
-      <div class="eyebrow">AI-POWERED DIGITAL EXPERIENCES</div>
-      <h1>Websites & Tools <span>Built with AI</span></h1>
-      <p>
-        Discover creative websites, interactive 3D experiences,
-        and practical tools created through AI-powered automation.
-      </p>
-      <a class="btn" href="#projects">Explore Our Projects</a>
-    </div>
+<header>
+<nav class="wrap">
+<a class="brand" href="./">AutoWeb <span>AI Pro</span></a>
+<div class="navlinks">
+<a href="#projects">Projects</a>
+<a href="#about">About</a>
+<a href="https://github.com/sabrenaexclusive-cyber/autoweb-ai-projects" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+</div>
+</nav>
+</header>
 
-    <section id="projects">
-      <h2>Featured Projects</h2>
-      <p class="subtitle">Explore our latest AI-generated experiences.</p>
+<section class="hero wrap">
+<div class="eyebrow">AI-Powered Digital Experiences</div>
+<h1>Discover the Future of <span class="gradient">AI-Built Websites</span></h1>
+<p class="lead">Explore interactive 3D showcases, creative websites, and practical digital tools — automatically discovered from our GitHub projects.</p>
+<a class="primary" href="#projects">Explore Projects ↓</a>
+<div class="stats">
+<div class="stat"><strong id="total">—</strong><span>Published Projects</span></div>
+<div class="stat"><strong id="categories">—</strong><span>Categories</span></div>
+<div class="stat"><strong id="favcount">0</strong><span>Your Favorites</span></div>
+</div>
+</section>
 
-      <div class="grid">
-        <article class="card">
-          <div class="art">🧊</div>
-          <div class="tag">INTERACTIVE 3D WEBSITE</div>
-          <h3>Local Makers Studio</h3>
-          <p>
-            Explore handmade crafts in an interactive 3D showroom
-            with a rotating showcase and gallery.
-          </p>
-          <a href="projects/20261116T232213Z-interactive-3d-website/index.html">
-            Open Website →
-          </a>
-        </article>
+<main class="wrap">
+<section class="section" id="projects">
+<h2>Project Explorer</h2>
+<p class="muted">Search, filter and explore automatically published projects.</p>
 
-        <article class="card">
-          <div class="art">🚀</div>
-          <div class="tag">MORE COMING SOON</div>
-          <h3>New AI Projects</h3>
-          <p>
-            More websites, interactive experiences and useful
-            tools will be featured here.
-          </p>
-        </article>
-      </div>
-    </section>
-  </main>
+<div class="toolbar">
+<label><span class="sr">Search projects</span><input id="search" type="search" placeholder="Search projects by name…" autocomplete="off"></label>
+<label><span class="sr">Category</span><select id="category"><option value="all">All Categories</option></select></label>
+<label><span class="sr">Sort projects</span><select id="sort">
+<option value="newest">Newest first</option>
+<option value="oldest">Oldest first</option>
+<option value="az">Name A–Z</option>
+<option value="za">Name Z–A</option>
+</select></label>
+</div>
 
-  <footer>
-    © 2026 AutoWeb AI. Built with creativity and automation.
-  </footer>
+<div class="chips">
+<button class="chip active" id="alltab" aria-pressed="true">All Projects</button>
+<button class="chip" id="favtab" aria-pressed="false">♡ Favorites</button>
+<button class="chip" id="reload">↻ Refresh</button>
+</div>
+
+<div id="grid" class="grid" aria-live="polite">
+<div class="notice">Loading projects…</div>
+</div>
+<button class="loadmore" id="more" hidden>Load More Projects</button>
+<p id="count" class="muted small" aria-live="polite"></p>
+</section>
+
+<section class="about" id="about">
+<h2>Built with AI. Published automatically.</h2>
+<p class="muted">AutoWeb AI Pro discovers project folders from the public GitHub repository and links to their GitHub Pages previews. New projects appear when Make.com successfully commits their files and GitHub Pages finishes deployment. Generation, code quality checks, and publishing permissions are managed separately by the automation workflow.</p>
+</section>
+</main>
+
+<footer class="footer">© <span id="year"></span> AutoWeb AI Pro · Powered by GitHub Pages</footer>
+
+<dialog id="details">
+<div class="modalhead">
+<h2 id="detailtitle">Project</h2>
+<button id="close" aria-label="Close details">✕</button>
+</div>
+<p id="detailcategory" class="tag"></p>
+<p class="muted" id="detaildescription"></p>
+<p class="small muted" id="detailpath"></p>
+<div class="modalactions">
+<a class="primary" id="detailopen" target="_blank" rel="noopener noreferrer">Open Live Project ↗</a>
+<a id="detailsource" target="_blank" rel="noopener noreferrer">View Source ↗</a>
+</div>
+</dialog>
 
 <script>
-(async function () {
-  const container = document.querySelector(
-    '#projects, .projects-grid, .project-grid'
+'use strict';
+
+const OWNER='sabrenaexclusive-cyber';
+const REPO='autoweb-ai-projects';
+const BRANCH='main';
+
+const API=`https://api.github.com/repos/${OWNER}/${REPO}/contents/projects?ref=${BRANCH}`;
+const SITE=`https://${OWNER}.github.io/${REPO}/projects/`;
+const SOURCE=`https://github.com/${OWNER}/${REPO}/tree/${BRANCH}/projects/`;
+const $=id=>document.getElementById(id);
+
+const state={
+  projects:[],
+  filtered:[],
+  limit:9,
+  tab:'all',
+  favorites:new Set()
+};
+
+try {
+  const stored=JSON.parse(localStorage.getItem('autoweb-favorites-v2')||'[]');
+  if(Array.isArray(stored)){
+    state.favorites=new Set(stored.filter(x=>typeof x==='string'));
+  }
+} catch {}
+
+$('year').textContent=new Date().getFullYear();
+
+function saveFavorites(){
+  try {
+    localStorage.setItem('autoweb-favorites-v2',JSON.stringify([...state.favorites]));
+  } catch {}
+  $('favcount').textContent=state.favorites.size;
+}
+
+saveFavorites();
+
+function niceName(name){
+  return (
+    name
+      .replace(/^\d{8}T\d{6}Z?[-_]?/i,'')
+      .replace(/[-_]+/g,' ')
+      .trim()
+      .replace(/\b\w/g,c=>c.toUpperCase())
+    || 'AI Project'
+  );
+}
+
+function categoryFor(name){
+  const n=name.toLowerCase();
+  if(/3d|interactive|showcase|gallery|viewer/.test(n))return '3D & Interactive';
+  if(/tool|calculator|converter|generator|utility/.test(n))return 'Tools';
+  if(/shop|store|commerce|product/.test(n))return 'E-commerce';
+  if(/portfolio|personal|resume/.test(n))return 'Portfolio';
+  if(/dashboard|analytics|report/.test(n))return 'Dashboards';
+  return 'Websites';
+}
+
+function projectFrom(item){
+  const name=item.name;
+  return {
+    id:name,
+    name:niceName(name),
+    category:categoryFor(name),
+    url:SITE+encodeURIComponent(name)+'/index.html',
+    source:SOURCE+encodeURIComponent(name),
+    rawName:name
+  };
+}
+
+function setStatus(message){
+  $('grid').replaceChildren();
+  const n=document.createElement('div');
+  n.className='notice';
+  n.textContent=message;
+  $('grid').append(n);
+  $('more').hidden=true;
+}
+
+function showDetails(p){
+  $('detailtitle').textContent=p.name;
+  $('detailcategory').textContent=p.category;
+  $('detaildescription').textContent='Explore this AI-generated project in a new tab. Its preview is hosted on GitHub Pages.';
+  $('detailpath').textContent='Project folder: projects/'+p.rawName+'/';
+  $('detailopen').href=p.url;
+  $('detailsource').href=p.source;
+  $('details').showModal();
+}
+
+function createCard(p){
+  const card=document.createElement('article');
+  card.className='card';
+
+  const head=document.createElement('div');
+  head.className='cardhead';
+
+  const symbol=document.createElement('div');
+  symbol.className='symbol';
+  symbol.textContent=
+    p.category==='3D & Interactive'?'◈':
+    p.category==='Tools'?'⚙':
+    p.category==='E-commerce'?'▣':'✦';
+
+  const fav=document.createElement('button');
+  fav.className='favorite';
+  fav.type='button';
+  fav.setAttribute('aria-label','Toggle favorite for '+p.name);
+  fav.setAttribute('aria-pressed',String(state.favorites.has(p.id)));
+  fav.textContent=state.favorites.has(p.id)?'♥':'♡';
+
+  fav.addEventListener('click',()=>{
+    state.favorites.has(p.id)
+      ? state.favorites.delete(p.id)
+      : state.favorites.add(p.id);
+    saveFavorites();
+    render();
+  });
+
+  head.append(symbol,fav);
+
+  const h=document.createElement('h3');
+  h.textContent=p.name;
+
+  const tag=document.createElement('span');
+  tag.className='tag';
+  tag.textContent=p.category;
+
+  const desc=document.createElement('p');
+  desc.textContent='Discover this AI-built '+p.category.toLowerCase()+' project.';
+
+  const actions=document.createElement('div');
+  actions.className='actions';
+
+  const link=document.createElement('a');
+  link.href=p.url;
+  link.target='_blank';
+  link.rel='noopener noreferrer';
+  link.textContent='Open Project ↗';
+
+  const details=document.createElement('button');
+  details.type='button';
+  details.textContent='Details';
+  details.addEventListener('click',()=>showDetails(p));
+
+  actions.append(link,details);
+  card.append(head,h,tag,desc,actions);
+  return card;
+}
+
+function filterProjects(){
+  const q=$('search').value.trim().toLowerCase();
+  const cat=$('category').value;
+
+  let arr=state.projects.filter(p=>
+    (p.name+' '+p.rawName+' '+p.category).toLowerCase().includes(q)
+    &&(cat==='all'||p.category===cat)
+    &&(state.tab==='all'||state.favorites.has(p.id))
   );
 
-  if (!container) {
-    console.warn('Project container not found');
-    return;
+  const sort=$('sort').value;
+  arr.sort((a,b)=>
+    sort==='az'?a.name.localeCompare(b.name):
+    sort==='za'?b.name.localeCompare(a.name):
+    sort==='oldest'?a.id.localeCompare(b.id):
+    b.id.localeCompare(a.id)
+  );
+
+  state.filtered=arr;
+}
+
+function render(){
+  filterProjects();
+  const shown=state.filtered.slice(0,state.limit);
+  $('grid').replaceChildren();
+
+  if(!shown.length){
+    setStatus(
+      state.tab==='favorites'
+      ? 'No matching favorites yet. Tap ♡ on a project to save it.'
+      : 'No matching projects found.'
+    );
+  } else {
+    const fragment=document.createDocumentFragment();
+    shown.forEach(p=>fragment.append(createCard(p)));
+    $('grid').append(fragment);
   }
+
+  $('more').hidden=shown.length>=state.filtered.length;
+  $('count').textContent=`Showing ${shown.length} of ${state.filtered.length} matching projects`;
+  saveFavorites();
+}
+
+async function load(){
+  setStatus('Loading published projects from GitHub…');
+  $('count').textContent='';
 
   try {
-    const api = 'https://api.github.com/repos/sabrenaexclusive-cyber/autoweb-ai-projects/contents/projects';
-    const response = await fetch(api);
+    const r=await fetch(API,{
+      headers:{Accept:'application/vnd.github+json'},
+      cache:'no-store'
+    });
 
-    if (!response.ok) throw new Error('Projects fetch failed');
+    if(!r.ok)throw new Error(`GitHub API HTTP ${r.status}`);
 
-    const folders = await response.json();
+    const data=await r.json();
+    if(!Array.isArray(data))throw Error('Unexpected GitHub response');
 
-    const projects = folders
-      .filter(item => item.type === 'dir')
-      .reverse();
+    state.projects=data
+      .filter(i=>i.type==='dir')
+      .map(projectFrom);
 
-    container.innerHTML = '';
+    $('total').textContent=state.projects.length;
 
-    for (const project of projects) {
-      const url =
-        'https://sabrenaexclusive-cyber.github.io/autoweb-ai-projects/projects/' +
-        encodeURIComponent(project.name) + '/index.html';
+    const cats=[...new Set(state.projects.map(p=>p.category))].sort();
+    $('categories').textContent=cats.length;
 
-      const card = document.createElement('a');
-      card.href = url;
-      card.target = '_blank';
-      card.rel = 'noopener noreferrer';
-      card.style.cssText =
-        'display:block;padding:24px;border-radius:16px;' +
-        'background:#171e35;color:white;text-decoration:none;' +
-        'border:1px solid #303b59;margin:12px 0;';
+    $('category').replaceChildren(new Option('All Categories','all'));
+    cats.forEach(c=>$('category').add(new Option(c,c)));
 
-      const heading = document.createElement('h3');
-      heading.textContent = project.name.replace(/[-_]/g, ' ');
+    state.limit=9;
+    render();
 
-      const description = document.createElement('p');
-      description.textContent = 'Explore this AI-generated project';
-
-      card.append(heading, description);
-      container.appendChild(card);
-    }
-  } catch (error) {
-    console.error('Unable to load projects:', error);
+  } catch(e){
+    console.error(e);
+    setStatus('Could not load projects. GitHub may be temporarily unavailable or rate-limited. Click Refresh to retry.');
+    $('total').textContent='—';
+    $('categories').textContent='—';
   }
-})();
+}
+
+$('search').addEventListener('input',()=>{
+  state.limit=9;
+  render();
+});
+
+$('category').addEventListener('change',()=>{
+  state.limit=9;
+  render();
+});
+
+$('sort').addEventListener('change',render);
+
+$('more').addEventListener('click',()=>{
+  state.limit+=9;
+  render();
+});
+
+$('reload').addEventListener('click',load);
+
+for(const [id,tab] of [['alltab','all'],['favtab','favorites']]){
+  $(id).addEventListener('click',()=>{
+    state.tab=tab;
+    state.limit=9;
+
+    for(const x of ['alltab','favtab']){
+      $(x).classList.toggle('active',x===id);
+      $(x).setAttribute('aria-pressed',String(x===id));
+    }
+
+    render();
+  });
+}
+
+$('close').addEventListener('click',()=>$('details').close());
+
+load();
 </script>
 </body>
 </html>
