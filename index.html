@@ -1,0 +1,146 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="AutoWeb AI — AI-powered websites, 3D experiences and useful web tools.">
+  <title>AutoWeb AI | Websites & Tools</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #080d1d;
+      color: #f4f6ff;
+      font-family: Arial, sans-serif;
+    }
+    header {
+      padding: 22px 7%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #26314a;
+    }
+    .logo { font-size: 24px; font-weight: 800; }
+    .logo span { color: #7c8cff; }
+    nav a { color: #b9c5dc; text-decoration: none; }
+    .hero {
+      text-align: center;
+      padding: 100px 20px 85px;
+      background: radial-gradient(ellipse at top, #1e2857, #080d1d 70%);
+    }
+    .eyebrow { color: #a5b4fc; font-weight: 700; }
+    h1 {
+      font-size: clamp(38px, 6vw, 72px);
+      margin: 20px auto;
+      max-width: 850px;
+      line-height: 1.12;
+    }
+    h1 span { color: #9aa7ff; }
+    .hero p {
+      color: #b8c3d9;
+      max-width: 630px;
+      margin: 0 auto 30px;
+      line-height: 1.7;
+    }
+    .btn {
+      display: inline-block;
+      background: linear-gradient(120deg, #7366ff, #32b8df);
+      padding: 15px 25px;
+      color: white;
+      text-decoration: none;
+      border-radius: 12px;
+      font-weight: 700;
+    }
+    section { padding: 65px 7%; }
+    h2 { font-size: 32px; }
+    .subtitle { color: #aab8d0; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+      margin-top: 35px;
+    }
+    .card {
+      background: #121b30;
+      border: 1px solid #293654;
+      border-radius: 18px;
+      padding: 26px;
+      transition: transform .2s, border-color .2s;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      border-color: #8490ff;
+    }
+    .art {
+      height: 145px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #293c77, #6948b4, #1c8caa);
+      display: grid;
+      place-items: center;
+      font-size: 52px;
+    }
+    .tag { color: #9eacff; font-size: 13px; margin-top: 22px; }
+    .card p { color: #b3bfd4; line-height: 1.6; }
+    .card a { color: #a8b7ff; font-weight: 700; }
+    footer {
+      text-align: center;
+      padding: 35px 20px;
+      border-top: 1px solid #26314a;
+      color: #94a3b8;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">AutoWeb <span>AI</span></div>
+    <nav><a href="#projects">Explore Projects</a></nav>
+  </header>
+
+  <main>
+    <div class="hero">
+      <div class="eyebrow">AI-POWERED DIGITAL EXPERIENCES</div>
+      <h1>Websites & Tools <span>Built with AI</span></h1>
+      <p>
+        Discover creative websites, interactive 3D experiences,
+        and practical tools created through AI-powered automation.
+      </p>
+      <a class="btn" href="#projects">Explore Our Projects</a>
+    </div>
+
+    <section id="projects">
+      <h2>Featured Projects</h2>
+      <p class="subtitle">Explore our latest AI-generated experiences.</p>
+
+      <div class="grid">
+        <article class="card">
+          <div class="art">🧊</div>
+          <div class="tag">INTERACTIVE 3D WEBSITE</div>
+          <h3>Local Makers Studio</h3>
+          <p>
+            Explore handmade crafts in an interactive 3D showroom
+            with a rotating showcase and gallery.
+          </p>
+          <a href="projects/20261116T232213Z-interactive-3d-website/index.html">
+            Open Website →
+          </a>
+        </article>
+
+        <article class="card">
+          <div class="art">🚀</div>
+          <div class="tag">MORE COMING SOON</div>
+          <h3>New AI Projects</h3>
+          <p>
+            More websites, interactive experiences and useful
+            tools will be featured here.
+          </p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    © 2026 AutoWeb AI. Built with creativity and automation.
+  </footer>
+</body>
+</html>
