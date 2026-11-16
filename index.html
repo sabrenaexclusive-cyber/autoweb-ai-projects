@@ -142,5 +142,59 @@
   <footer>
     © 2026 AutoWeb AI. Built with creativity and automation.
   </footer>
+
+<script>
+(async function () {
+  const container = document.querySelector(
+    '#projects, .projects-grid, .project-grid'
+  );
+
+  if (!container) {
+    console.warn('Project container not found');
+    return;
+  }
+
+  try {
+    const api = 'https://api.github.com/repos/sabrenaexclusive-cyber/autoweb-ai-projects/contents/projects';
+    const response = await fetch(api);
+
+    if (!response.ok) throw new Error('Projects fetch failed');
+
+    const folders = await response.json();
+
+    const projects = folders
+      .filter(item => item.type === 'dir')
+      .reverse();
+
+    container.innerHTML = '';
+
+    for (const project of projects) {
+      const url =
+        'https://sabrenaexclusive-cyber.github.io/autoweb-ai-projects/projects/' +
+        encodeURIComponent(project.name) + '/index.html';
+
+      const card = document.createElement('a');
+      card.href = url;
+      card.target = '_blank';
+      card.rel = 'noopener noreferrer';
+      card.style.cssText =
+        'display:block;padding:24px;border-radius:16px;' +
+        'background:#171e35;color:white;text-decoration:none;' +
+        'border:1px solid #303b59;margin:12px 0;';
+
+      const heading = document.createElement('h3');
+      heading.textContent = project.name.replace(/[-_]/g, ' ');
+
+      const description = document.createElement('p');
+      description.textContent = 'Explore this AI-generated project';
+
+      card.append(heading, description);
+      container.appendChild(card);
+    }
+  } catch (error) {
+    console.error('Unable to load projects:', error);
+  }
+})();
+</script>
 </body>
 </html>
