@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Nova3D Studio — Interactive Website & 3D Experience</title>
+  <meta name="description" content="A modern, responsive interactive website with lightweight 3D effects and a practical built-in calculator tool. Explore a rotating 3D cube, responsive design, accessibility, and smooth UX." />
+  <link rel="canonical" href="https://example.com/nova3d-studio" />
+  <meta property="og:title" content="Nova3D Studio — Interactive Website & 3D Experience" />
+  <meta property="og:description" content="Explore a responsive site with 3D visuals and a functional calculator tool to enhance productivity." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://example.com/nova3d-studio" />
+  <meta property="og:image" content="https://example.com/preview.png" />
+  <style>
+    :root{
+      --bg: #0b1020;
+      --fg: #e8eaf6;
+      --muted: #a8b3d0;
+      --accent: #6be675;
+      --card: rgba(255,255,255,0.08);
+      --shadow: 0 10px 25px rgba(0,0,0,.25);
+      --radius: 14px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;background:radial-gradient(1200px circle at 20% -10%, rgba(107,230,117,.15), transparent 40%), radial-gradient(900px circle at 100% 0%, rgba(123,97,255,.15), transparent 40%), var(--bg); color:var(--fg); font-family: Inter, system-ui, -apple-system, Arial, sans-serif; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale}
+    header{position:sticky;top:0;z-index:10;background:linear-gradient(to right, rgba(11,16,32,.95), rgba(11,16,32,.85));border-bottom:1px solid rgba(255,255,255,.07)}
+    .wrap{max-width:1100px;margin:0 auto;padding:20px}
+    nav{display:flex;gap:14px;align-items:center}
+    nav a{color:#eaf2ff;text-decoration:none;padding:10px 14px;border-radius:999px;background:rgba(255,255,255,.04)}
+    nav a:hover{background:rgba(255,255,255,.09)}
+    .hero{display:grid;grid-template-columns:1.05fr 0.95fr;gap:28px;align-items:center;min-height:70vh;padding:40px 0}
+    .left{padding:20px}
+    h1{font-size: clamp(2rem, 2.6vw + 1rem, 3.6rem); line-height:1.05; margin:0 0 12px 0; letter-spacing:.2px}
+    p{color:var(--muted); font-size: 1.05rem; margin:0 0 20px}
+    .cta{display:flex;gap:12px;flex-wrap:wrap}
+    .btn{border:0; border-radius:999px; padding:12px 18px; font-weight:600; cursor:pointer; transition: transform .2s ease, background .2s ease; text-decoration:none}
+    .btn-primary{background:linear-gradient(135deg, #4f8cff 0%, #2bd6a4 100%); color:white}
+    .btn-secondary{background:rgba(255,255,255,.1); color:#eaf2ff}
+    .visual{ perspective:1000px; height:420px; position:relative; border-radius:var(--radius); overflow:hidden; box-shadow: var(--shadow); background: linear-gradient(135deg, #0a0f1e, #1b2540 60%, #0b1220); border:1px solid rgba(255,255,255,.08)}
+    canvas{ width:100%; height:100%; display:block }
+    .credit{position:absolute; bottom:8px; right:12px; font-size:12px; color: rgba(255,255,255,.7)}
+    .card{ background:var(--card); border-radius:var(--radius); padding:20px; box-shadow: var(--shadow); border:1px solid rgba(255,255,255,.08)}
+    .grid{ display:grid; grid-template-columns: repeat(2, 1fr); gap:20px }
+    @media (max-width: 900px){
+      .hero{grid-template-columns:1fr; text-align:left}
+      .visual{ height:320px }
+      .grid{ grid-template-columns: 1fr }
+    }
+    /* 3D interaction helpers */
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap" aria-label="Main navigation">
+      <nav>
+        <a href="#home" aria-label="Home">Home</a>
+        <a href="#about" aria-label="About">About</a>
+        <a href="#tool" aria-label="Tool">Tool</a>
+        <a href="#contact" aria-label="Contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+  <main id="home" class="wrap" style="padding-top:28px;padding-bottom:40px">
+    <section class="hero">
+      <div class="left">
+        <h1>Nova3D Studio — Interactive Website with Light 3D and a Practical Tool</h1>
+        <p>Experience a responsive, accessible site featuring a lightweight 3D canvas, smooth interactions, and a built-in calculator tool that solves real-world tasks in your browser.</p>
+        <div class="cta">
+          <button class="btn btn-primary" onclick="document.getElementById('tool').scrollIntoView({behavior:'smooth'});" aria-label="Open tool">Try the Calculator Tool</button>
+          <button class="btn btn-secondary" onclick="window.scrollTo({top:0,behavior:'smooth'});" aria-label="Back to top">Back to top</button>
+        </div>
+      </div>
+      <div class="visual" aria-label="3D visualization canvas">
+        <canvas id="glCanvas" width="600" height="420"></canvas>
+        <div class="credit">3D cube demo</div>
+      </div>
+    </section>
+
+    <section id="about" class="card" style="margin-top:24px;">
+      <div class="grid" style="align-items:stretch;">
+        <div>
+          <h3>What you get</h3>
+          <p style="color:var(--muted);">A clean, fast website with a tasteful 3D effect, accessible navigation, and a built-in tool that demonstrates practical client-side processing without external services.</p>
+        </div>
+        <div>
+          <h3>Why it matters</h3>
+          <p style="color:var(--muted);">0 dependencies, responsive layout, and a focus on performance and accessibility make this ready for real-world use and quick adaptation to your brand.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="tool" class="card" style="margin-top:24px; padding:22px;">
+      <h2 style="margin:0 0 12px 0;">Productivity Calculator Tool</h2>
+      <p style="color:var(--muted); margin:0 0 14px 0;">A lightweight client-side tool to estimate project effort in person-hours based on task complexity and team size.</p>
+      <div class="grid" style="gap:14px; align-items:stretch;">
+        <div class="card" style="padding:14px;">
+          <label for="tasks" style="display:block; font-weight:600; margin-bottom:6px;">Estimated number of tasks</label>
+          <input id="tasks" type="number" min="1" max="1000" step="1" value="10" aria-label="Number of tasks" style="width:100%; padding:10px; border-radius:8px; border:1px solid #334; background:#0b1220; color:#eaf2ff;" />
+        </div>
+        <div class="card" style="padding:14px;">
+          <label for="team" style="display:block; font-weight:600; margin-bottom:6px;">Team size (people)</label>
+          <input id="team" type="number" min="1" max="50" step="1" value="4" aria-label="Team size" style="width:100%; padding:10px; border-radius:8px; border:1px solid #334; background:#0b1220; color:#eaf2ff;" />
+        </div>
+      </div>
+      <div class="card" style="margin-top:12px; padding:14px;">
+        <button id="calculate" class="btn btn-primary" aria-label="Calculate effort" style="margin-right:8px;">Estimate Effort</button>
+        <span id="result" style="font-weight:600; color:#e8f8ff;">Enter inputs and click Estimate Effort</span>
+        <div id="errors" role="alert" aria-live="polite" style="color:#ffb4b4; margin-top:6px;"></div>
+      </div>
+    </section>
+
+    <section id="contact" class="card" style="margin-top:24px; padding:20px;">
+      <h2>Contact</h2>
+      <p style="color:var(--muted);">This is a self-contained demo. For inquiries, adapt this template to your brand and host locally or publicly as needed.</p>
+    </section>
+  </main>
+
+  <script>
+    // Lightweight 3D cube using WebGL via canvas without heavy libs
+    (function(){
+      const canvas = document.getElementById('glCanvas');
+      const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+      if(!gl){ return; }
+      const vsSource = `attribute vec4 aVertexPosition; uniform mat4 uModelViewMatrix; uniform mat4 uProjectionMatrix; void main(void){ gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition; }`;
+      const fsSource = `precision mediump float; uniform vec4 uColor; void main(void){ gl_FragColor = uColor; }`;
+      function loadShader(type, source){ const shader = gl.createShader(type); gl.shaderSource(shader, source); gl.compileShader(shader); if(!gl.getShaderParameter(shader, gl.COMPILE_STATUS)){ console.error('Shader compile failed:', gl.getShaderInfoLog(shader)); gl.deleteShader(shader); return null;} return shader; }
+      const vertexShader = loadShader(gl.VERTEX_SHADER, vsSource);
+      const fragmentShader = loadShader(gl.FRAGMENT_SHADER, fsSource);
+      const shaderProgram = gl.createProgram(); gl.attachShader(shaderProgram, vertexShader); gl.attachShader(shaderProgram, fragmentShader); gl.linkProgram(shaderProgram);
+      if(!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)){ console.error('Unable to initialize shader program.'); return; }
+      const programInfo = { program: shaderProgram, attribLocations: { vertexPosition: gl.getAttribLocation(shaderProgram, 'aVertexPosition') }, uniformLocations: { projectionMatrix: gl.getUniformLocation(shaderProgram, 'uProjectionMatrix'), modelViewMatrix: gl.getUniformLocation(shaderProgram, 'uModelViewMatrix'), color: gl.getUniformLocation(shaderProgram, 'uColor') } };
+      const positions = [
+        // cube vertices
+        -1, -1,  1,
+         1, -1,  1,
+         1,  1,  1,
+        -1,  1,  1,
+        -1, -1, -1,
+         1, -1, -1,
+         1,  1, -1,
+        -1,  1, -1,
+      ];
+      const indices = [ 0,1,2, 0,2,3, 4,5,6, 4,6,7, 0,1,5, 0,5,4, 2,3,7, 2,7,6, 0,3,7, 0,7,4, 1,2,6, 1,6,5 ];
+      function createBuffer(data, target, usage){ const buf = gl.createBuffer(); gl.bindBuffer(target, buf); gl.bufferData(target===gl.ELEMENT_ARRAY_BUFFER?gl.ELEMENT_ARRAY_BUFFER:gl.ARRAY_BUFFER, new Float32Array(data), usage || gl.STATIC_DRAW); return buf; }
+      const positionBuffer = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+      const indexBuffer = gl.createBuffer(); gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer); gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW);
+      function render(now){ now *= 0.001; const delta = now; const fieldOfView = 45 * Math.PI/180; const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight; const zNear = 0.1; const zFar = 100.0; const projectionMatrix = mat4Perspective(fieldOfView, aspect, zNear, zFar);
+        const modelViewMatrix = mat4Identity();
+        mat4Translate(modelViewMatrix, [0.0,0.0,-6.0]);
+        mat4RotateY(modelViewMatrix, delta*0.8);
+        gl.viewport(0,0,gl.canvas.width, gl.canvas.height);
+        gl.clearColor(0.05,0.07,0.15,1.0); gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT); gl.enable(gl.DEPTH_TEST);
+        gl.useProgram(programInfo.program);
+        gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer); gl.vertexAttribPointer(programInfo.attribLocations.vertexPosition, 3, gl.FLOAT, false, 0, 0); gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+        gl.uniformMatrix4fv(programInfo.uniformLocations.projectionMatrix, false, projectionMatrix);
+        gl.uniformMatrix4fv(programInfo.uniformLocations.modelViewMatrix, false, modelViewMatrix);
+        gl.uniform4f(programInfo.uniformLocations.color, 0.4, 0.9, 1.0, 1.0);
+        gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);
+        requestAnimationFrame(render);
+      }
+      // Minimal matrix helpers
+      function mat4Identity(){ return new Float32Array([1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1]); }
+      function mat4Translate(m, v){ m[12]+=v[0]; m[13]+=v[1]; m[14]+=v[2]; }
+      function mat4RotateY(m, a){ const c=Math.cos(a), s=Math.sin(a); 
+        const m0 = m[0], m1 = m[1], m2 = m[2], m3 = m[3];
+        const m4 = m[4], m5 = m[5], m6 = m[6], m7 = m[7];
+        const m8 = m[8], m9 = m[9], m10 = m[10], m11 = m[11];
+        m[0] = c*m0 + s*m8; m[1] = c*m1 + s*m9; m[2] = c*m2 + s*m10; m[3] = c*m3 + s*m11;
+        m[8] = -s*m0 + c*m8; m[9] = -s*m1 + c*m9; m[10] = -s*m2 + c*m10; m[11] = -s*m3 + c*m11;
+      }
+      function mat4Perspective(fov, aspect, near, far){ const f = 1.0/Math.tan(fov/2); const nf = 1/(near - far); const out = new Float32Array(16); out[0]=f/aspect; out[1]=0; out[2]=0; out[3]=0; out[4]=0; out[5]=f; out[6]=0; out[7]=0; out[8]=0; out[9]=0; out[10]=(far+near)*nf; out[11]=-1; out[12]=0; out[13]=0; out[14]=(2*far*near)*nf; out[15]=0; return out; }
+      // kick off
+      render(0);
+      // Handle resize for responsiveness
+      function resizeCanvas(){ const dpr = window.devicePixelRatio || 1; const w = canvas.clientWidth; const h = canvas.clientHeight; if(canvas.width !== w*dpr || canvas.height !== h*dpr){ canvas.width = Math.max(1, w*dpr); canvas.height = Math.max(1, h*dpr); } }
+      window.addEventListener('resize', resizeCanvas);
+      resizeCanvas();
+    })();
+
+    // Calculator tool logic
+    (function(){
+      const calcBtn = document.getElementById('calculate');
+      const resultEl = document.getElementById('result');
+      const errorsEl = document.getElementById('errors');
+      calcBtn.addEventListener('click', function(){
+        errorsEl.textContent = '';
+        const tasks = Number(document.getElementById('tasks').value);
+        const team = Number(document.getElementById('team').value);
+        const errors = [];
+        if(!Number.isFinite(tasks) || tasks <= 0){ errors.push('Please enter a valid number of tasks.'); }
+        if(!Number.isFinite(team) || team <= 0){ errors.push('Please enter a valid team size.'); }
+        if(errors.length){ errorsEl.textContent = errors.join(' '); resultEl.textContent = ''; return; }
+        // Simple heuristic: baseline hours per task varies with team efficiency
+        // hours = tasks * (8 / max(1, team)) with a small overhead factor
+        const baseline = tasks * (8 / Math.max(1, team));
+        const overhead = Math.max(2, Math.round(tasks/5));
+        const totalHours = Math.max(6, Math.round(baseline + overhead));
+        resultEl.textContent = 'Estimated effort: ' + totalHours + ' person-hours (approx.)';
+      });
+    })();
+  </script>
+</body>
+</html>
