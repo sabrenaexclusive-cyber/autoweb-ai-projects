@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EcoSphere – Interactive 3D Landing & Sustainability Hub</title>
+  <meta name="description" content="A modern, responsive interactive website featuring a 3D rotating cube demonstration and a sustainability hub with tips, testimonials, and story-driven content." />
+  <meta property="og:title" content="EcoSphere – Interactive 3D Landing & Sustainability Hub" />
+  <meta property="og:description" content="Explore a visually engaging 3D experience and learn practical sustainability tips." />
+  <meta property="og:type" content="website" />
+  <meta name="robots" content="index, follow" />
+  <style>
+    :root{
+      --bg: #0b1020;
+      --card: #141a30;
+      --muted: #a3b3d6;
+      --accent: #6be675;
+      --text: #e8ecf8;
+      --shadow: 0 10px 25px rgba(0,0,0,.25);
+    }
+    *,*::before,*::after{box-sizing:border-box}
+    html,body{margin:0;height:100%;font-family:Inter, ui-sans-serif, system-ui, Arial; color:var(--text);background:radial-gradient( circle at 20% -10%, rgba(107,230,117,.25) 0%, transparent 40%), radial-gradient( circle at 100% 0%, rgba(0,150,255,.15) 0%, transparent 40%), var(--bg);}
+    a{color:inherit;text-decoration:none}
+    header{position:sticky;top:0;z-index:50;background:rgba(10,12,25,.92);backdrop-filter:saturate(1.2) blur(6px);border-bottom:1px solid rgba(255,255,255,.05)}
+    .nav{max-width:1100px;margin:0 auto;padding:14px 20px;display:flex;gap:14px;align-items:center}
+    .brand{font-weight:700;letter-spacing:.5px}
+    .nav ul{list-style:none;display:flex;gap:16px;margin:0;padding:0}
+    .nav li{padding:6px 10px;border-radius:8px}
+    .nav a{color:#dfe7ff;font-size:14px}
+    .hero{display:grid;grid-template-columns:1.05fr .95fr;gap:28px;align-items:center;max-width:1100px;margin:40px auto;padding:0 20px}
+    .hero-copy{padding:6px 0}
+    h1{font-size:clamp(28px,4vw,46px);line-height:1.05;margin:0 0 12px}
+    p{color:var(--muted);font-size:clamp(14px,2.2vw,16px);margin:0 0 18px}
+    .cta{display:flex;gap:12px;flex-wrap:wrap}
+    .btn{padding:12px 18px;border-radius:10px;border:1px solid rgba(255,255,255,.15);background:linear-gradient(135deg, rgba(107,230,117,.25), rgba(107,230,117,.05));color:#eaffea;font-weight:600;cursor:pointer;transition:transform .2s ease, background .3s ease}
+    .btn.primary{background: linear-gradient(135deg, rgba(0,180,120,.8), rgba(0,120,90,.8));border:0}
+    .btn:hover{transform:translateY(-1px)}
+    .globe{width:320px;height:320px; perspective:1000px; margin:0 auto; display:flex; align-items:center; justify-content:center}
+    .cube{width:180px;height:180px; position:relative; transform-style:preserve-3d; animation: spin 12s linear infinite}
+    .face{position:absolute;width:180px;height:180px; border:1px solid rgba(255,255,255,.25); background: rgba(255,255,255,.04); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:20px; color:#eafffb}
+    .face.front{ transform: translateZ(90px); background: linear-gradient(135deg, rgba(0,180,120,.7), rgba(0,120,90,.9));}
+    .face.back{ transform: rotateY(180deg) translateZ(90px); background: linear-gradient(135deg, rgba(0,120,255,.7), rgba(0,60,180,.9));}
+    .face.right{ transform: rotateY(90deg) translateZ(90px); background: linear-gradient(135deg, rgba(0,180,120,.6), rgba(0,120,90,.8));}
+    .face.left{ transform: rotateY(-90deg) translateZ(90px); background: linear-gradient(135deg, rgba(0,120,255,.6), rgba(0,60,180,.8));}
+    .face.top{ transform: rotateX(90deg) translateZ(90px); background: linear-gradient(135deg, rgba(255,210,0,.7), rgba(210,150,0,.9));}
+    .face.bottom{ transform: rotateX(-90deg) translateZ(90px); background: linear-gradient(135deg, rgba(0,0,0,.6), rgba(20,20,20,.9));}
+    @keyframes spin{from{transform: rotateX(0deg) rotateY(0deg);}to{transform: rotateX(360deg) rotateY(360deg);}}
+    main{max-width:1100px;margin:0 auto;padding:20px}
+    section{margin:40px 0}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+    .card{background: rgba(20,26,48,.9); border:1px solid rgba(255,255,255,.08); border-radius:14px;padding:20px;box-shadow: var(--shadow)}
+    ul{margin:10px 0 0 18px;color:#d6e4ff}
+    footer{text-align:center;color:#88a; padding:24px 0;border-top:1px solid rgba(255,255,255,.08); margin-top:40px}
+    @media (max-width: 960px){
+      .hero{grid-template-columns:1fr;gap:14px; text-align:left}
+      .globe{width:260px;height:260px}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="nav" aria-label="Main navigation">
+      <div class="brand">EcoSphere</div>
+      <ul>
+        <li><a href="#about">About</a></li>
+        <li><a href="#interactive">Interactive 3D</a></li>
+        <li><a href="#tips">Tips</a></li>
+        <li><a href="#tool">Carbon Calculator</a></li>
+      </ul>
+    </nav>
+  </header>
+  <section class="hero" id="top">
+    <div class="hero-copy" aria-label="Intro">
+      <h1>EcoSphere: A Beautiful, Usable Space for Sustainability</h1>
+      <p>Explore a visually engaging 3D experience and learn practical, action-oriented sustainability tips. Navigate with ease, discover simple eco-friendly actions, and try our lightweight interactive tool to estimate your carbon footprint.</p>
+      <div class="cta">
+        <button class="btn primary" onclick="document.getElementById('tool').scrollIntoView({behavior:'smooth'});">Open Carbon Calculator</button>
+        <button class="btn" onclick="document.getElementById('about').scrollIntoView({behavior:'smooth'});">Learn More</button>
+      </div>
+    </div>
+    <div class="globe" aria-label="3D cube demonstration">
+      <div class="cube" title="Rotating cube representing sustainability facets">
+        <div class="face front">ENERGY</div>
+        <div class="face back">WASTE</div>
+        <div class="face right">TRANSPORT</div>
+        <div class="face left">WATER</div>
+        <div class="face top">MATERIALS</div>
+        <div class="face bottom">FOREST</div>
+      </div>
+    </div>
+  </section>
+  <main>
+    <section id="about" class="grid" aria-label="About EcoSphere">
+      <div class="card">
+        <h2>What is EcoSphere?</h2>
+        <p>EcoSphere is a compact, accessible landing and learning hub. It blends modern design, lightweight 3D visuals, and practical content to help users adopt sustainable habits without overwhelm.</p>
+        <ul>
+          <li>Responsive layout for mobile, tablet, and desktop</li>
+          <li>Accessible navigation and clear CTAs</li>
+          <li>Visually engaging 3D elements with graceful fallbacks</li>
+        </ul>
+      </div>
+     <div class="card" aria-label="Benefits">
+        <h2>Benefits</h2>
+        <ul>
+          <li>Quick, actionable sustainability tips</li>
+          <li>Low-friction 3D visuals that enhance comprehension</li>
+          <li>Self-contained, client-side interactions without servers</li>
+        </ul>
+      </div>
+    </section>
+    <section id="tips" aria-label="Practical Tips">
+      <div class="card" aria-label="Tips" style="min-height:260px; display:flex; flex-direction:column; justify-content:center; align-items:flex-start;">
+        <h2>Starter Tips to Reduce Your Carbon Footprint</h2>
+        <ol>
+          <li>Switch to energy-efficient lighting and unplug idle electronics.</li>
+          <li>Prefer public transit, biking, or carpooling; consider EVs if feasible.</li>
+          <li>Reduce, reuse, recycle; buy durable products with less packaging.</li>
+          <li>Support local and seasonal foods to shrink transportation emissions.</li>
+        </ol>
+      </div>
+    </section>
+    <section id="tool" aria-label="Carbon Calculator" class="grid">
+      <div class="card" style="min-height:260px; padding-bottom:32px">
+        <h2>Carbon Footprint Calculator (Client-side)</h2>
+        <p>Estimate your annual CO2e with quick inputs. This tool runs entirely in your browser and does not require any keys or servers.</p>
+        <form id="calculator" autocomplete="off" onsubmit="event.preventDefault(); calculate();">
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; align-items:end; margin-bottom:8px;">
+            <label>Annual electricity usage (kWh)
+              <input type="number" id="electricity" min="0" step="1" placeholder="e.g. 3500" aria-label="Annual electricity usage" style="width:100%; padding:8px; border-radius:6px; border:1px solid #334; background:#fff; color:#000;"/>
+            </label>
+            <label>Annual natural gas usage (therms)
+              <input type="number" id="gas" min="0" step="0.1" placeholder="e.g. 100" aria-label="Annual gas usage" style="width:100%; padding:8px; border-radius:6px; border:1px solid #334; background:#fff; color:#000;"/>
+            </label>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; align-items:end;">
+            <label>Annual miles driven
+              <input type="number" id="miles" min="0" step="1" placeholder="e.g. 12000" aria-label="Annual miles driven" style="width:100%; padding:8px; border-radius:6px; border:1px solid #334; background:#fff; color:#000;"/>
+            </label>
+            <label>Fuel efficiency (mpg or mpg-e)
+              <input type="number" id="mpg" min="0" step="0.1" placeholder="e.g. 28" aria-label="Fuel efficiency" style="width:100%; padding:8px; border-radius:6px; border:1px solid #334; background:#fff; color:#000;"/>
+            </label>
+          </div>
+          <div style="margin-top:12px; display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+            <button class="btn primary" type="submit">Calculate</button>
+            <span id="note" aria-live="polite" style="color:#a8ffea; font-weight:600;"></span>
+          </div>
+        </form>
+        <div id="results" aria-label="Results" style="margin-top:14px; padding-top:12px; border-top:1px solid rgba(255,255,255,.08);">
+          <p style="margin:0; color:#d6e4ff;">Results will appear here after you press Calculate.</p>
+        </div>
+      </div>
+      <div class="card" aria-label="How to reduce footprint" style="min-height:260px; display:flex; flex-direction:column; justify-content:center; align-items:flex-start;">
+        <h2>Actionable Guidance</h2>
+        <ul>
+          <li>Lower electricity consumption by upgrading to LED lighting and using smart thermostats.</li>
+          <li>Choose efficient heating and cooling; seal leaks and improve insulation.</li>
+          <li>Combine errands to reduce total miles and choose sustainable transport where possible.</li>
+        </ul>
+        <p style="margin-top:8px; color:#aab8e8; font-size:14px;">Note: This is a client-side tool for educational purposes and does not collect data.</p>
+      </div>
+    </section>
+  </main>
+  <footer>
+    <p>EcoSphere © 2026 • Built with vanilla HTML, CSS, and JS. No data leaves your device.</p>
+  </footer>
+  <script>
+    // Simple client-side carbon calculator logic
+    function calculate(){
+      const electricity = parseFloat(document.getElementById('electricity').value) || 0;
+      const gas = parseFloat(document.getElementById('gas').value) || 0;
+      const miles = parseFloat(document.getElementById('miles').value) || 0;
+      const mpg = parseFloat(document.getElementById('mpg').value) || 0;
+
+      // Rough emission factors (approximate, for educational use)
+      const kgCO2_per_kWh = 0.000642; // kg CO2 per kWh (approx 0.642 g/kWh)
+      const kgCO2_per_therm = 5.3; // approx per therm natural gas
+      const kgCO2_per_mile = mpg > 0 ? (19.6 / mpg) : 0; // crude grams per mile converted later
+
+      const electricity_kg = electricity * kgCO2_per_kWh; // kg
+      const gas_kg = gas * kgCO2_per_therm; // kg
+      // Convert miles with mpg to CO2: pounds per mile ~ 0.92 lb/gal * gallons per mile; simplified
+      const gallons = mpg > 0 ? miles / mpg : 0;
+      const miles_kg = gallons * 0.45359237 * 0.0; // placeholder to ensure structure
+      // Use a simple vehicle emission model: 404 g CO2 per mile on average without precise vehicle
+      const vehicle_kg = miles > 0 && mpg > 0 ? (miles * (404/1000)) / 1 : 0; // rough average 404 g/mile
+
+      // Total in kg CO2e per year (approximate aggregation)
+      const total_kg = electricity_kg + gas_kg + (isFinite(vehicle_kg) ? vehicle_kg : 0);
+      const total_tonnes = total_kg / 1000;
+
+      // Display results with friendly formatting
+      const resBox = document.getElementById('results');
+      const note = document.getElementById('note');
+      const totalRounded = Math.max(0, Math.round(total_tonnes * 10) / 10);
+      resBox.innerHTML = `
+        <h3>Estimated annual CO2e: <span style="color:#a6ffd6;">${totalRounded} t CO2e</span></h3>
+        <ul>
+          <li>Electricity: ${electricity.toLocaleString(undefined, {maximumFractionDigits:0})} kWh → ${electricity_kg.toFixed(2)} kg CO2e</li>
+          <li>Natural gas: ${gas.toLocaleString(undefined, {maximumFractionDigits:0})} therms → ${gas_kg.toFixed(2)} kg CO2e</li>
+          <li>Vehicle: ${miles.toLocaleString()} miles with ${mpg || '—'} mpg → ~${(vehicle_kg).toFixed(2)} kg CO2e</li>
+        </ul>
+        <p style="color:#a8ffea; margin:0;">Tip: Small changes can yield >1 ton/year in reductions.</p>
+      `;
+      note.textContent = totalRounded > 0 ? 'Calculation complete.' : 'Enter valid inputs to compute.';
+    }
+  </script>
+</body>
+</html>
