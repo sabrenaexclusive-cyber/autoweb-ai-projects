@@ -1,0 +1,175 @@
+
+name: AutoWeb Independent Maintenance
+
+on:
+  schedule:
+    - cron: '35 2 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: autoweb-maintenance
+  cancel-in-progress: false
+
+jobs:
+  maintenance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Load existing projects
+        uses: actions/checkout@v4
+
+      - name: Audit projects and prepare SEO files
+        run: |
+          python3 <<'PY'
+          import json
+          import re
+          import hashlib
+          import os
+          from pathlib import Path
+          from datetime import datetime, timezone
+          from urllib.parse import quote
+          import xml.etree.ElementTree as ET
+
+          BASE = "https://sabrenaexclusive-cyber.github.io/autoweb-ai-projects/"
+          output = Path("maintenance-output")
+          output.mkdir(exist_ok=True)
+
+          projects = []
+          issues = []
+          hashes = {}
+          urls = set()
+
+          if Path("index.html").is_file():
+              urls.add(BASE)
+
+          for file in sorted(Path("projects").glob("*/index.html")):
+              if not file.is_file() or file.is_symlink():
+                  continue
+
+              path = file.as_posix()
+              content = file.read_text(
+                  encoding="utf-8", errors="replace"
+              )
+
+              title_match = re.search(
+                  r"<title\b[^>]*>(.*?)</title>",
+                  content, re.I | re.S
+              )
+
+              title = (
+                  title_match.group(1).strip()
+                  if title_match else file.parent.name
+              )
+
+              url = BASE + quote(
+                  file.parent.as_posix(), safe="/"
+              ) + "/"
+
+              problems = []
+
+              checks = {
+                  "Missing HTML doctype": r"<!doctype\s+html",
+                  "Missing HTML closing tag": r"</html\s*>",
+                  "Missing page title": r"<title\b",
+                  "Missing viewport": r'name\s*=\s*["\']viewport',
+                  "Missing meta description": r'name\s*=\s*["\']description'
+              }
+
+              for message, pattern in checks.items():
+                  if not re.search(pattern, content, re.I):
+                      problems.append(message)
+
+              if len(content.strip()) < 300:
+                  problems.append("Possible incomplete source")
+
+              digest = hashlib.sha256(
+                  content.encode("utf-8")
+              ).hexdigest()
+
+              if digest in hashes:
+                  problems.append(
+                      "Duplicate of " + hashes[digest]
+                  )
+              else:
+                  hashes[digest] = path
+
+              if not problems:
+                  urls.add(url)
+
+              projects.append({
+                  "project_id": file.parent.name,
+                  "title": title,
+                  "path": path,
+                  "url": url,
+                  "sha256": digest,
+                  "issues": problems
+              })
+
+              for problem in problems:
+                  issues.append({
+                      "path": path,
+                      "issue": problem
+                  })
+
+          report = {
+              "updated_at": datetime.now(
+                  timezone.utc
+              ).isoformat(),
+              "total_projects": len(projects),
+              "total_issues": len(issues),
+              "projects": projects,
+              "issues": issues,
+              "make_credits_used": 0
+          }
+
+          (output / "project-memory.json").write_text(
+              json.dumps(report, indent=2),
+              encoding="utf-8"
+          )
+
+          namespace = "http://www.sitemaps.org/schemas/sitemap/0.9"
+          ET.register_namespace("", namespace)
+          root = ET.Element("{" + namespace + "}urlset")
+
+          for url in sorted(urls):
+              item = ET.SubElement(
+                  root, "{" + namespace + "}url"
+              )
+              ET.SubElement(
+                  item, "{" + namespace + "}loc"
+              ).text = url
+
+          ET.ElementTree(root).write(
+              output / "sitemap.xml",
+              encoding="utf-8",
+              xml_declaration=True
+          )
+
+          summary = (
+              "# AutoWeb Maintenance Report\n\n"
+              f"- Projects found: {len(projects)}\n"
+              f"- Issues detected: {len(issues)}\n"
+              "- Make.com credits used: 0\n"
+              "- Production files modified: 0\n"
+              "- Validation: Static source audit\n"
+          )
+
+          with open(
+              os.environ["GITHUB_STEP_SUMMARY"],
+              "a", encoding="utf-8"
+          ) as f:
+              f.write(summary)
+
+          print(summary)
+          PY
+
+      - name: Save maintenance reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: autoweb-maintenance-report
+          path: maintenance-output/
+          retention-days: 30
