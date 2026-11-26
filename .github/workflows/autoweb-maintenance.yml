@@ -1,4 +1,4 @@
-name: AutoWeb Independent Maintenance
+name: AutoWeb Independent Maintenance V2
 
 on:
   schedule:
@@ -6,7 +6,8 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
+  pull-requests: write
 
 concurrency:
   group: autoweb-maintenance
@@ -15,22 +16,24 @@ concurrency:
 jobs:
   maintenance:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
 
     steps:
       - name: Load existing projects
         uses: actions/checkout@v4
 
-      - name: Audit projects and prepare SEO files
+      - name: Audit and safely repair projects
         run: |
           python3 <<'PY'
           import json
           import re
           import hashlib
           import os
+          import html
           from pathlib import Path
           from datetime import datetime, timezone
           from urllib.parse import quote
+          from collections import Counter
           import xml.etree.ElementTree as ET
 
           BASE = "https://sabrenaexclusive-cyber.github.io/autoweb-ai-projects/"
@@ -39,20 +42,45 @@ jobs:
 
           projects = []
           issues = []
+          repairs = []
+          recovery = []
+          warnings = []
           hashes = {}
+          categories = Counter()
           urls = set()
 
           if Path("index.html").is_file():
               urls.add(BASE)
 
+          checks = {
+              "Missing HTML doctype": r"<!doctype\s+html",
+              "Missing HTML closing tag": r"</html\s*>",
+              "Missing page title": r"<title\b",
+              "Missing viewport": r'<meta\b[^>]*\bname\s*=\s*["\']?viewport\b',
+              "Missing meta description": r'<meta\b[^>]*\bname\s*=\s*["\']?description\b'
+          }
+
           for file in sorted(Path("projects").glob("*/index.html")):
+
               if not file.is_file() or file.is_symlink():
                   continue
 
+              if file.parent.is_symlink():
+                  continue
+
               path = file.as_posix()
-              content = file.read_text(
-                  encoding="utf-8", errors="replace"
-              )
+              project_id = file.parent.name
+
+              try:
+                  original = file.read_bytes().decode("utf-8")
+              except UnicodeDecodeError:
+                  recovery.append({
+                      "path": path,
+                      "reason": "Invalid UTF-8 encoding"
+                  })
+                  continue
+
+              content = original
 
               title_match = re.search(
                   r"<title\b[^>]*>(.*?)</title>",
@@ -60,69 +88,171 @@ jobs:
               )
 
               title = (
-                  title_match.group(1).strip()
-                  if title_match else file.parent.name
+                  html.unescape(title_match.group(1).strip())
+                  if title_match else project_id
               )
 
               url = BASE + quote(
                   file.parent.as_posix(), safe="/"
               ) + "/"
 
-              problems = []
+              valid_name = bool(re.fullmatch(
+                  r"[A-Za-z0-9_-]+", project_id
+              ))
 
-              checks = {
-                  "Missing HTML doctype": r"<!doctype\s+html",
-                  "Missing HTML closing tag": r"</html\s*>",
-                  "Missing page title": r"<title\b",
-                  "Missing viewport": r'name\s*=\s*["\']viewport',
-                  "Missing meta description": r'name\s*=\s*["\']description'
-              }
+              if not valid_name:
+                  warnings.append({
+                      "path": path,
+                      "issue": "Nonstandard project folder name"
+                  })
 
-              for message, pattern in checks.items():
-                  if not re.search(pattern, content, re.I):
-                      problems.append(message)
+              before = [
+                  message for message, pattern in checks.items()
+                  if not re.search(pattern, content, re.I)
+              ]
 
               if len(content.strip()) < 300:
-                  problems.append("Possible incomplete source")
+                  before.append("Possible incomplete source")
+
+              safe_to_repair = (
+                  len(content.strip()) >= 300
+                  and valid_name
+                  and title_match is not None
+                  and re.search(r"<!doctype\s+html", content, re.I)
+                  and re.search(r"</html\s*>\s*$", content, re.I)
+                  and re.search(r"</head\s*>", content, re.I)
+              )
+
+              if safe_to_repair:
+
+                  additions = []
+                  fixed = []
+
+                  if "Missing viewport" in before:
+                      additions.append(
+                          '<meta name="viewport" content="width=device-width, initial-scale=1">'
+                      )
+                      fixed.append("Added mobile viewport")
+
+                  if "Missing meta description" in before:
+                      description = re.sub(
+                          r"\s+", " ", title
+                      ).strip()[:150]
+
+                      if description:
+                          additions.append(
+                              '<meta name="description" content="'
+                              + html.escape(description, quote=True)
+                              + '">'
+                          )
+                          fixed.append("Added title-based meta description")
+
+                  if additions:
+                      content = re.sub(
+                          r"</head\s*>",
+                          lambda m: "\n".join(additions) + "\n" + m.group(0),
+                          content,
+                          count=1,
+                          flags=re.I
+                      )
+
+                  if content != original:
+                      file.write_bytes(content.encode("utf-8"))
+
+                      repairs.append({
+                          "path": path,
+                          "repairs": fixed
+                      })
+
+              elif before:
+                  recovery.append({
+                      "path": path,
+                      "reason": "Unsafe or incomplete source",
+                      "issues": before
+                  })
+
+              remaining = [
+                  message for message, pattern in checks.items()
+                  if not re.search(pattern, content, re.I)
+              ]
+
+              if len(content.strip()) < 300:
+                  remaining.append("Possible incomplete source")
 
               digest = hashlib.sha256(
                   content.encode("utf-8")
               ).hexdigest()
 
               if digest in hashes:
-                  problems.append(
-                      "Duplicate of " + hashes[digest]
+                  remaining.append(
+                      "Exact duplicate of " + hashes[digest]
                   )
               else:
                   hashes[digest] = path
 
-              if not problems:
+              lower_title = title.lower()
+
+              if "3d" in lower_title:
+                  category = "3D Website"
+              elif "calculator" in lower_title:
+                  category = "Calculator"
+              elif "budget" in lower_title:
+                  category = "Finance Tool"
+              elif "planner" in lower_title:
+                  category = "Planner"
+              else:
+                  category = "Other"
+
+              categories[category] += 1
+
+              if not remaining:
                   urls.add(url)
 
               projects.append({
-                  "project_id": file.parent.name,
+                  "project_id": project_id,
                   "title": title,
+                  "category": category,
                   "path": path,
                   "url": url,
                   "sha256": digest,
-                  "issues": problems
+                  "original_issues": before,
+                  "remaining_issues": remaining
               })
 
-              for problem in problems:
+              for problem in remaining:
                   issues.append({
                       "path": path,
                       "issue": problem
                   })
 
+          total = len(projects)
+
+          if total >= 3:
+              for category, count in categories.items():
+                  if count / total >= 0.6:
+                      warnings.append({
+                          "issue": "Possible category repetition",
+                          "category": category,
+                          "count": count,
+                          "recommendation": "Diversify future project ideas"
+                      })
+
           report = {
-              "updated_at": datetime.now(
-                  timezone.utc
-              ).isoformat(),
-              "total_projects": len(projects),
-              "total_issues": len(issues),
+              "version": "2.0",
+              "updated_at": datetime.now(timezone.utc).isoformat(),
+              "total_projects": total,
+              "remaining_issues": len(issues),
+              "projects_repaired": len(repairs),
+              "projects_requiring_recovery": len(recovery),
+              "categories": dict(categories),
               "projects": projects,
               "issues": issues,
-              "make_credits_used": 0
+              "repairs": repairs,
+              "recovery": recovery,
+              "warnings": warnings,
+              "audience_analytics": "Not connected",
+              "make_credits_used": 0,
+              "deployment_mode": "Pull request review"
           }
 
           (output / "project-memory.json").write_text(
@@ -132,6 +262,7 @@ jobs:
 
           namespace = "http://www.sitemaps.org/schemas/sitemap/0.9"
           ET.register_namespace("", namespace)
+
           root = ET.Element("{" + namespace + "}urlset")
 
           for url in sorted(urls):
@@ -149,12 +280,17 @@ jobs:
           )
 
           summary = (
-              "# AutoWeb Maintenance Report\n\n"
-              f"- Projects found: {len(projects)}\n"
-              f"- Issues detected: {len(issues)}\n"
+              "# AutoWeb Maintenance V2 Report\n\n"
+              f"- Projects scanned: {total}\n"
+              f"- Proposed project repairs: {len(repairs)}\n"
+              f"- Remaining issues: {len(issues)}\n"
+              f"- Projects requiring recovery: {len(recovery)}\n"
+              f"- Warnings: {len(warnings)}\n"
               "- Make.com credits used: 0\n"
-              "- Production files modified: 0\n"
+              "- Production branch modified: No\n"
+              "- Audience analytics: Not connected\n"
               "- Validation: Static source audit\n"
+              "- Repairs require pull request review\n"
           )
 
           with open(
@@ -172,3 +308,25 @@ jobs:
           name: autoweb-maintenance-report
           path: maintenance-output/
           retention-days: 30
+
+      - name: Create safe repair pull request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: autoweb/automatic-maintenance
+          base: main
+          delete-branch: true
+          commit-message: "AutoWeb V2: safe website repairs"
+          title: "AutoWeb V2 - Automatic Website Maintenance"
+          body: |
+            Automated static website maintenance.
+
+            - Add missing mobile viewport tags
+            - Add missing title-based meta descriptions
+            - Preserve existing website functionality
+            - Never overwrite incomplete websites
+            - Review changes before merging
+
+            Detailed reports are available in Actions artifacts.
+          add-paths: |
+            projects/
