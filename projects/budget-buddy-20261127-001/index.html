@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Budget Buddy: Personal Finance Planner</title>
+  <meta name="description" content="A responsive, self-contained budget planner to help you plan income, track expenses, set savings goals, and visualize your monthly progress." />
+  <link rel="canonical" href="https://sabrenaexclusive-cyber.github.io/autoweb-ai-projects/projects/budget-buddy-20261127-001/index.html" />
+  <meta property="og:title" content="Budget Buddy: Personal Finance Planner" />
+  <meta property="og:description" content="A responsive budget planner to manage income, expenses, and savings with live calculations." />
+  <meta property="og:type" content="website" />
+  <style>
+    :root{
+      --bg: #0f1220;
+      --card: #141a2a;
+      --muted: #8a92a6;
+      --text: #e9eefc;
+      --accent: #4cc9f0;
+      --good: #39d98a;
+      --warn: #f59e0b;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;height:100%}
+    body{font-family: system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;background: radial-gradient(circle at 20% -10%, #1b1a2b 0%, #0f1220 40%), linear-gradient(#0f1220,#0f1220 60%,#0a0b14 100%); color:var(--text);} 
+    header{padding:20px; text-align:center}
+    h1{margin:0;font-size:1.6rem;letter-spacing:.2px}
+    .container{max-width:1100px;margin:0 auto;padding:20px;display:grid;gap:20px;grid-template-columns:1fr 1fr}
+    .card{background: rgba(20,26,42,.95); border:1px solid #2a2f4a; border-radius:12px; padding:16px; box-shadow: 0 6px 20px rgba(0,0,0,.25)}
+    label{display:block;margin:12px 0 6px;font-size:.9rem;color:var(--muted)}
+    input[type="number"]{width:100%;padding:10px;border-radius:8px;border:1px solid #2f3a6d;background:#0b1130;color:#fff;font-size:.95rem}
+    input[type="text"]{width:100%;padding:10px;border-radius:8px;border:1px solid #2f3a6d;background:#0b1130;color:#fff;font-size:.95rem}
+    .row{display:flex;gap:12px;flex-wrap:wrap}
+    .col{flex:1 1 240px}
+    .result{font-size:1.1rem;font-weight:600}
+    .hint{font-size:.85rem;color:var(--muted)}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    canvas{max-width:100%;height:180px}
+    .bar{height:20px;background:#2b2f55;border-radius:8px;overflow:hidden}
+    .bar > span{display:block;height:100%;background:linear-gradient(90deg, var(--accent), #58e0ff)}
+    .cta{display:inline-flex;align-items:center;gap:8px;padding:12px 16px;border-radius:8px;border:0;background:var(--accent);color:#001018;font-weight:700;cursor:pointer}
+    @media (max-width: 900px){
+      .container{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Budget Buddy: Personal Finance Planner</h1>
+    <p class="hint">Plan income, allocate expenses, and visualize progress toward saving goals with real-time calculations.</p>
+  </header>
+  <main class="container" aria-label="Budget planning dashboard">
+    <section class="card" aria-labelledby="inputs-title">
+      <h2 id="inputs-title" style="font-size:1.1rem;margin:0 0 8px">Inputs</h2>
+      <div class="grid">
+        <div class="col">
+          <label for="income">Monthly Net Income</label>
+          <input id="income" type="number" min="0" step="0.01" value="3500" aria-label="Monthly net income" />
+        </div>
+        <div class="col">
+          <label for="rent">Fixed Expenses (Rent/Mortgage)</label>
+          <input id="rent" type="number" min="0" step="0.01" value="1200" aria-label="Fixed expenses" />
+        </div>
+        <div class="col">
+          <label for="utilities">Utilities (electric, water, internet)</label>
+          <input id="utilities" type="number" min="0" step="0.01" value="300" aria-label="Utilities" />
+        </div>
+        <div class="col">
+          <label for="transport">Transportation</label>
+          <input id="transport" type="number" min="0" step="0.01" value="150" aria-label="Transportation" />
+        </div>
+      </div>
+      <div class="grid" style="margin-top:8px">
+        <div class="col">
+          <label for="groceries">Groceries</label>
+          <input id="groceries" type="number" min="0" step="0.01" value="420" aria-label="Groceries" />
+        </div>
+        <div class="col">
+          <label for="entertainment">Entertainment & Dining</label>
+          <input id="entertainment" type="number" min="0" step="0.01" value="180" aria-label="Entertainment" />
+        </div>
+        <div class="col">
+          <label for="savings">Savings Goal (monthly)</label>
+          <input id="savings" type="number" min="0" step="0.01" value="300" aria-label="Savings" />
+        </div>
+        <div class="col">
+          <label for="emergency">Emergency Fund Target (monthly addition)</label>
+          <input id="emergency" type="number" min="0" step="0.01" value="50" aria-label="Emergency fund" />
+        </div>
+      </div>
+      <div class="row" style="margin-top:14px;align-items:center;gap:8px;flex-wrap:wrap">
+        <button class="cta" id="recalc" aria-label="Recalculate budget">Recalculate</button>
+        <span class="hint" id="note"></span>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="summary-title" style="min-height:260px">
+      <h2 id="summary-title" style="font-size:1.1rem;margin:0 0 8px">Summary & Visual</h2>
+      <div class="row" style="align-items:stretch;gap:14px;flex-wrap:wrap">
+        <div class="col" style="min-width:260px">
+          <div class="result">Leftover (Income - Expenses): <span id="leftover" aria-live="polite">0.00</span></div>
+          <div class="hint">Positive leftover means you can save or invest. Negative indicates overspending.</div>
+        </div>
+        <div class="col" style="min-width:260px">
+          <div class="result">Recommended Allocation: Savings { <span id="savingsPct">0</span>% } | Spending { <span id="spendingPct">0</span>% }</div>
+        </div>
+      </div>
+      <div style="margin-top:12px">
+        <div class="bar" aria-label="Savings progress" title="Savings progress"><span style="width:0%"></span></div>
+        <div class="hint" style="margin-top:6px">Visual: proportion of income allocated to savings vs spending.</div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="card" style="max-width:1100px;margin:0 auto 40px;padding:16px 20px;text-align:center;border-radius:12px;opacity:.95">
+    <small>Budget Buddy is a self-contained tool with no external dependencies. All calculations are client-side.</small>
+  </footer>
+
+  <script>
+    (function(){
+      const selectors = ['income','rent','utilities','transport','groceries','entertainment','savings','emergency'];
+      const el = {};
+      selectors.forEach(id => el[id] = document.getElementById(id));
+      const leftoverEl = document.getElementById('leftover');
+      const savingsPctEl = document.getElementById('savingsPct');
+      const spendingPctEl = document.getElementById('spendingPct');
+      const noteEl = document.getElementById('note');
+      const barSpan = document.querySelector('.bar > span');
+
+      function parse(n){ const v = Number(n); return Number.isFinite(v) ? v : 0; }
+
+      function recalc(){
+        // gather inputs
+        const income = parse(el['income'].value);
+        const fixed = parse(el['rent'].value) + parse(el['utilities'].value);
+        const transport = parse(el['transport'].value);
+        const groceries = parse(el['groceries'].value);
+        const entertainment = parse(el['entertainment'].value);
+        const savings = parse(el['savings'].value);
+        const emergency = parse(el['emergency'].value);
+        const expenses = fixed + transport + groceries + entertainment;
+        const totalExpenses = expenses + savings + emergency; // treat emergency as expense for monthly view
+        const leftover = income - totalExpenses;
+
+        // bounds and messaging
+        leftoverEl.textContent = leftover.toFixed(2);
+        // simple heuristic: allocate 20-30% to savings, rest to spending
+        const savingsPct = Math.min(100, Math.max(0, (savings / Math.max(1, income)) * 100));
+        const spendingPct = Math.max(0, 100 - savingsPct);
+        savingsPctEl.textContent = savingsPct.toFixed(0);
+        spendingPctEl.textContent = spendingPct.toFixed(0);
+        // simple bar fill relative to combined allocation (0-100)
+        const barWidth = Math.max(0, Math.min(100, (savings / Math.max(1, income)) * 100));
+        barSpan.style.width = barWidth.toFixed(2) + '%';
+        // notes
+        if(leftover >= 0){
+          noteEl.textContent = 'Nice! You have room to increase savings or investments.';
+        } else {
+          noteEl.textContent = 'Consider reducing discretionary spending or reassessing fixed costs.';
+        }
+      }
+
+      // initial calculation
+      recalc();
+
+      // event listeners
+      document.getElementById('recalc').addEventListener('click', recalc);
+      // also recalc on input changes for live feedback (debounced-ish)
+      const inputs = Array.from(document.querySelectorAll('input[type="number"]'));
+      inputs.forEach(inp => inp.addEventListener('input', () => {
+        // avoid excessive reflow by small timeout
+        clearTimeout(inp._t);
+        inp._t = setTimeout(recalc, 150);
+      }));
+    })();
+  </script>
+</body>
+</html>
