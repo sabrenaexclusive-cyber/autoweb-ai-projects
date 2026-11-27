@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Personal Budget Calculator — Quick, Local, Offline</title>
+  <meta name="description" content="A lightweight, standalone budget calculator to plan monthly income, expenses, and savings with instant calculations and offline storage." />
+  <link rel="canonical" https://sabrenaexclusive-cyber.github.io/autoweb-ai-projects/projects/proj-20261128-budget-calculator/index.html>
+  <meta property="og:title" content="Personal Budget Calculator — Quick, Local, Offline" />
+  <meta property="og:description" content="A lightweight, standalone budget calculator to plan monthly income, expenses, and savings with instant calculations and offline storage." />
+  <meta property="og:type" content="website" />
+  <style>
+    :root{
+      --bg: #0f1115;
+      --card: #171b22;
+      --text: #e8eefc;
+      --muted: #a6b4d6;
+      --accent: #4cc9f0;
+      --positive: #4cd97b;
+      --negative: #f66;
+      --radius: 12px;
+      --shadow: 0 6px 18px rgba(0,0,0,.25);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial; color:var(--text);
+      background: radial-gradient( circle at 20% -10%, rgba(76,201,240,.15), transparent 40%),
+                  radial-gradient( circle at 100% 0%, rgba(76,199,240,.15), transparent 40%),
+                  linear-gradient(#0b0e14, #0b0e14 60%, #0a0d12);
+      min-height:100vh;
+    }
+    header{padding:16px 20px; border-bottom:1px solid rgba(255,255,255,.05); position:sticky; top:0; background:#0b0e14; z-index:10}
+    header h1{font-size:1.25rem; margin:0}
+    main{max-width:1100px; margin:20px auto; padding:0 16px}
+    .grid{display:grid; grid-template-columns:1fr; gap:20px}
+    @media (min-width: 860px){ .grid{grid-template-columns:1.05fr .95fr} }
+    .card{background: linear-gradient(180deg, rgba(23,27,34,.95), rgba(23,27,34,.85)); border:1px solid rgba(255,255,255,.06); border-radius:var(--radius); padding:20px; box-shadow:var(--shadow)}
+    h2{font-size:1.1rem; margin:0 0 12px}
+    label{display:block; font-size:.92rem; color:var(--muted); margin:10px 0 6px}
+    input[type="number"], input[type="text"]{width:100%; padding:10px 12px; border-radius:8px; border:1px solid rgba(255,255,255,.25); background:#0f141f; color:#fff; font-size:1rem}
+    input:focus{outline:2px solid var(--accent); border-color:#9bdcff}
+    .row{display:flex; gap:10px; align-items:center}
+    .row > div{flex:1}
+    .btn{background: linear-gradient(135deg, #4cc9f0, #4cc9f0); color:white; border:none; padding:12px 14px; border-radius:8px; cursor:pointer; font-weight:600}
+    .btn.secondary{background: #1e232d; color:#e8eefc; border:1px solid rgba(255,255,255,.15)}
+    .section-title{margin:6px 0 12px; font-size:1rem; color:#d5e6ff}
+    .results{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:8px}
+    @media (max-width:520px){ .results{grid-template-columns:1fr} }
+    .result{padding:12px; border-radius:8px; background:#1a2030; border:1px solid rgba(255,255,255,.08)}
+    .result .label{font-size:.78rem; color:var(--muted)}
+    .result .value{ font-size:1.2rem; font-weight:700; margin-top:6px }
+    .note{font-size:.85rem; color:var(--muted); margin-top:6px}
+    nav a{color:#a8c5ff; text-decoration:none; margin-right:12px}
+    footer{text-align:center; padding:24px; color:var(--muted); font-size:.85rem}
+    </style>
+</head>
+<body>
+  <header>
+    <h1>Personal Budget Calculator</h1>
+    <p style="margin:0; color:var(--muted); font-size:.9rem">A simple, offline-friendly tool to plan monthly income, expenses, and savings.</p>
+  </header>
+  <main>
+    <div class="grid">
+      <section class="card" aria-labelledby="budgets-title">
+        <h2 id="budgets-title">Budget Input</h2>
+        <p class="note" aria-live="polite">Enter your monthly figures. All data is stored locally in your browser.</p>
+        <form id="budgetForm" autocomplete="off" novalidate>
+          <div class="row">
+            <div>
+              <label for="income">Net Monthly Income</label>
+              <input type="number" id="income" min="0" step="0.01" placeholder="e.g. 3500" required />
+            </div>
+          </div>
+          <hr style="border:none; border-top:1px solid rgba(255,255,255,.08); margin:14px 0" />
+          <div class="row">
+            <div>
+              <label for="rent">Rent / Mortgage</label>
+              <input type="number" id="rent" min="0" step="0.01" placeholder="e.g. 1200" />
+            </div>
+            <div>
+              <label for="utilities">Utilities</label>
+              <input type="number" id="utilities" min="0" step="0.01" placeholder="e.g. 250" />
+            </div>
+          </div>
+          <div class="row">
+            <div>
+              <label for="groceries">Groceries</label>
+              <input type="number" id="groceries" min="0" step="0.01" placeholder="e.g. 350" />
+            </div>
+            <div>
+              <label for="transport">Transport</label>
+              <input type="number" id="transport" min="0" step="0.01" placeholder="e.g. 120" />
+            </div>
+          </div>
+          <div class="row">
+            <div>
+              <label for="other">Other Expenses</label>
+              <input type="number" id="other" min="0" step="0.01" placeholder="e.g. 100" />
+            </div>
+            <div>
+              <label for="savingsRate">Savings Rate (percent of income)</label>
+              <input type="number" id="savingsRate" min="0" max="100" step="1" placeholder="e.g. 15" />
+            </div>
+          </div>
+          <div class="row" style="margin-top:12px">
+            <button type="button" class="btn" id="calcBtn" aria-label="Calculate budget">Calculate</button>
+            <button type="button" class="btn secondary" id="resetBtn" aria-label="Reset inputs" style="margin-left:auto">Reset</button>
+          </div>
+        </form>
+      </section>
+      <section class="card" aria-labelledby="results-title">
+        <h2 id="results-title">Results & Insights</h2>
+        <div class="results" aria-live="polite">
+          <div class="result" aria-label="Net income after expenses">
+            <div class="label">Net Income</div>
+            <div class="value" id="netIncome">0</div>
+          </div>
+          <div class="result" aria-label="Total expenses">
+            <div class="label">Total Expenses</div>
+            <div class="value" id="totalExpenses">0</div>
+          </div>
+          <div class="result" aria-label="Monthly savings amount">
+            <div class="label">Monthly Savings</div>
+            <div class="value" id="savings">0</div>
+          </div>
+          <div class="result" aria-label="Savings rate achieved vs goal">
+            <div class="label">Savings Rate</div>
+            <div class="value" id="savingsRateDisplay">0%</div>
+          </div>
+        </div>
+        <p class="note" id="helper" style="margin-top:12px">Tip: Save regularly and adjust expenses to keep net income positive. Values persist in your browser.</p>
+      </section>
+    </div>
+  </main>
+  <footer>
+    <nav aria-label="Footer navigation">
+      <a href="#" tabindex="-1">Privacy</a>
+      <a href="#" tabindex="-1">Terms</a>
+      <span>© 2026 AutoWeb AI Budget Tool</span>
+    </nav>
+  </footer>
+  <script>
+    (function(){
+      const form = document.getElementById('budgetForm');
+      const incomeEl = document.getElementById('income');
+      const rentEl = document.getElementById('rent');
+      const utilitiesEl = document.getElementById('utilities');
+      const groceriesEl = document.getElementById('groceries');
+      const transportEl = document.getElementById('transport');
+      const otherEl = document.getElementById('other');
+      const savingsRateEl = document.getElementById('savingsRate');
+      const netIncomeEl = document.getElementById('netIncome');
+      const totalExpensesEl = document.getElementById('totalExpenses');
+      const savingsEl = document.getElementById('savings');
+      const savingsRateDisplayEl = document.getElementById('savingsRateDisplay');
+      const calcBtn = document.getElementById('calcBtn');
+      const resetBtn = document.getElementById('resetBtn');
+
+      const STORAGE_KEY = 'proj-20261128-budget-calculator-state';
+
+      function parseNum(n){
+        const v = Number(n);
+        return Number.isFinite(v) && v >= 0 ? v : 0;
+      }
+
+      function loadState(){
+        try{
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if(!raw) return null;
+          const obj = JSON.parse(raw);
+          return obj;
+        }catch(e){ return null; }
+      }
+
+      function saveState(state){
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      }
+
+      function calculate(){
+        const income = parseNum(incomeEl.value);
+        const rent = parseNum(rentEl.value);
+        const utilities = parseNum(utilitiesEl.value);
+        const groceries = parseNum(groceriesEl.value);
+        const transport = parseNum(transportEl.value);
+        const other = parseNum(otherEl.value);
+        const savingsRate = parseNum(savingsRateEl.value);
+
+        const totalExpenses = rent + utilities + groceries + transport + other;
+        const savings = Math.max(0, income * (savingsRate / 100));
+        const netIncome = Math.max(0, income - totalExpenses);
+
+        netIncomeEl.textContent = formatMoney(netIncome);
+        totalExpensesEl.textContent = formatMoney(totalExpenses);
+        savingsEl.textContent = formatMoney(savings);
+        const actualRate = income > 0 ? Math.min(100, (savings / income) * 100) : 0;
+        savingsRateDisplayEl.textContent = actualRate.toFixed(0) + '%';
+      }
+
+      function formatMoney(n){
+        return '$' + Number(n).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      }
+
+      function initFromState(state){
+        if(!state) return;
+        incomeEl.value = state.income ?? 0;
+        rentEl.value = state.rent ?? 0;
+        utilitiesEl.value = state.utilities ?? 0;
+        groceriesEl.value = state.groceries ?? 0;
+        transportEl.value = state.transport ?? 0;
+        otherEl.value = state.other ?? 0;
+        savingsRateEl.value = state.savingsRate ?? 0;
+        calculate();
+      }
+
+      calcBtn.addEventListener('click', calculate);
+      resetBtn.addEventListener('click', ()=>{
+        incomeEl.value = '';
+        rentEl.value = '';
+        utilitiesEl.value = '';
+        groceriesEl.value = '';
+        transportEl.value = '';
+        otherEl.value = '';
+        savingsRateEl.value = '';
+        netIncomeEl.textContent = '$0.00';
+        totalExpensesEl.textContent = '$0.00';
+        savingsEl.textContent = '$0.00';
+        savingsRateDisplayEl.textContent = '0%';
+        localStorage.removeItem(STORAGE_KEY);
+      });
+
+      // Persist on change
+      form.addEventListener('input', ()=>{
+        const state = {
+          income: Number(incomeEl.value) || 0,
+          rent: Number(rentEl.value) || 0,
+          utilities: Number(utilitiesEl.value) || 0,
+          groceries: Number(groceriesEl.value) || 0,
+          transport: Number(transportEl.value) || 0,
+          other: Number(otherEl.value) || 0,
+          savingsRate: Number(savingsRateEl.value) || 0
+        };
+        saveState(state);
+      });
+
+      // Initialize
+      const existing = loadState();
+      initFromState(existing);
+    })();
+  </script>
+</body>
+</html>
